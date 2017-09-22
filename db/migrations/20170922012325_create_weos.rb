@@ -9,7 +9,7 @@ Hanami::Model.migration do
       column :subject_desc, String                           # Subject Descriptor
       column :subject_note, String                           # Subject Notes
       column :units, String, null: false                     # Units
-      column :scale, String, null: false                     # Scale
+      column :scale, String                                  # Scale
       column :year, String, size: 4                          # 1980 to 2022
       column :amount, BigDecimal                             # ammount of money
       column :estimate_start_after, String                   # Estimates Start After

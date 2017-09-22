@@ -1,6 +1,5 @@
 Hanami::Model.migration do
   change do
-    drop_table? :weos
     create_table :weos do
       primary_key :id
       column :weo_contry_code, String, null: false, size: 3  # WEO Country Code
@@ -14,8 +13,11 @@ Hanami::Model.migration do
       column :year, String, size: 4                          # 1980 to 2022
       column :amount, BigDecimal                             # ammount of money
       column :estimate_start_after, String                   # Estimates Start After
+
       column :created_at, DateTime, null: false
       column :updated_at, DateTime, null: false
+
+      index [:weo_contry_code, :iso, :year], name: :weo_data_index
     end
   end
 end

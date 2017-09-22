@@ -1,0 +1,4 @@
+project=weodata
+architecture=container
+test=minitest
+template=erb

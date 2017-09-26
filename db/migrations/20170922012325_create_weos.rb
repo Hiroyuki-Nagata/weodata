@@ -11,7 +11,7 @@ Hanami::Model.migration do
       column :units, String, null: false                     # Units
       column :scale, String                                  # Scale
       column :year, String, size: 4                          # 1980 to 2022
-      column :amount, BigDecimal                             # ammount of money
+      column :amount, String                                 # ammount of money
       column :estimate_start_after, String                   # Estimates Start After
 
       column :created_at, DateTime, null: false

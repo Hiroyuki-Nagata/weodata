@@ -14,10 +14,10 @@ Hanami::Model.migration do
       CSV.new(f, col_sep: ",", headers: true, :quote_char => '"').each do |row|
         weo_array = []
         1980.upto(2022) do |year|
-          ammount = if row[year.to_s].nil?
+          amount = if row[year.to_s].nil? || row[year.to_s] == 'n/a'
             0
           else
-            row[year.to_s].gsub!(/,/, "")
+            row[year.to_s].gsub(/,/, "")
           end
           weo = {
             weo_contry_code:  row["WEO Country Code"],
@@ -29,7 +29,7 @@ Hanami::Model.migration do
             units:            row["Units"],
             scale:            row["Scale"],
             year:             year,
-            amount:           ammount,
+            amount:           amount,
             estimate_start_after: row["Estimates Start After"]
           }
           weo_array << weo

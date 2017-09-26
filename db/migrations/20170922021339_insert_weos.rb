@@ -7,41 +7,42 @@ Hanami.boot
 
 Hanami::Model.migration do
   change do
+    weo_data_set = File.expand_path('db/migrations/WEOApr2017all.csv')
+    errors = []
 
-#    sqls = %{
-#      INSERT INTO weos VALUES (weo_contry_code
-#                              , iso
-#                              , weo_subject_code
-#                              , country
-#                              , subject_desc
-#                              , subject_note
-#                              , units
-#                              , scale
-#                              , year
-#                              , amount
-#                              , estimate_start_after)
-#    }
+    open(weo_data_set, "rb:ascii-8bit") do |f|
+      CSV.new(f, col_sep: ",", headers: true, :quote_char => '"').each do |row|
+        weo_array = []
+        1980.upto(2022) do |year|
+          ammount = if row[year.to_s].nil?
+            0
+          else
+            row[year.to_s].gsub!(/,/, "")
+          end
+          weo = {
+            weo_contry_code:  row["WEO Country Code"],
+            iso:              row["ISO"],
+            weo_subject_code: row["WEO Subject Code"],
+            country:          row["Country"],
+            subject_desc:     row["Subject Descriptor"],
+            subject_note:     row["Subject Notes"],
+            units:            row["Units"],
+            scale:            row["Scale"],
+            year:             year,
+            amount:           ammount,
+            estimate_start_after: row["Estimates Start After"]
+          }
+          weo_array << weo
+        end
 
-    weo_data_set = File.expand_path('db/migrations/WEOApr2017all.xls')
-    weo_array = []
-
-    CSV.foreach(weo_data_set, col_sep: "\t", headers: true) do |row|
-      1980.upto(2022) do |year|
-        weo = WeoRepository.new.create(
-          weo_contry_code:  row["WEO Country Code"],
-          iso:              row["ISO"],
-          weo_subject_code: row["WEO Subject Code"],
-          country:          row["Country"],
-          subject_desc:     row["Subject Descriptor"],
-          subject_note:     row["Subject Notes"],
-          units:            row["Units"],
-          scale:            row["Scale"],
-          year:             year,
-          amount:           row[year.to_s],
-          estimate_start_after: row["Estimates Start After"]
-        )
+        begin
+          WeoRepository.new.bulk_insert(weo_array)
+        rescue => e
+          errors << { error_type: e.class, message: e.message }
+          puts "An error of type #{e.class} happened, message is #{e.message}"
+        end
       end
-    # finish
     end
+    puts errors.to_s
   end
 end

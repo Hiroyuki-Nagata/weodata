@@ -17,7 +17,7 @@ Hanami::Model.migration do
       column :created_at, DateTime, null: false
       column :updated_at, DateTime, null: false
 
-      index [:weo_contry_code, :iso, :year], name: :weo_data_index
+      index [:weo_contry_code, :weo_subject_code, :iso, :year], name: :weo_data_index
     end
   end
 end

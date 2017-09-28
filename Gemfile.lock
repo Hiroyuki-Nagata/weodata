@@ -167,6 +167,7 @@ DEPENDENCIES
   chartkick
   dotenv (~> 2.0)
   hanami (~> 1.0)
+  hanami-assets
   hanami-model (~> 1.0)
   hanami-utils
   jdbc-sqlite3

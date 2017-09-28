@@ -6,6 +6,7 @@ gem 'rake'
 gem 'hanami',       '~> 1.0'
 gem 'hanami-model', '~> 1.0'
 gem 'hanami-utils'
+gem 'hanami-assets'
 gem 'chartkick'
 
 group :test, :development do
